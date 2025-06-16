@@ -192,8 +192,8 @@ if not df_filtre.empty:
 else:
     st.warning("Aucune donnée pour cet indicateur.")
 
-st.markdown
-("""
+
+st.markdown("""
 ---
 **Conceptualisé et développé par Mohamed Falilou Fall**  
 Juin 2025  
