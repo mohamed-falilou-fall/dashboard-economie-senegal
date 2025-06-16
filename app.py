@@ -9,7 +9,7 @@ import plotly.express as px
 st.markdown("""
     <style>
         body {
-            background-image: url("background.jpg");
+            background-image: url("https://github.com/mohamed-falilou-fall/dashboard-economie-senegal/blob/master/background.jpg");
             background-size: cover;
             background-attachment: fixed;
             background-repeat: no-repeat;
