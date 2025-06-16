@@ -123,7 +123,7 @@ if not df_filtre.empty:
                 titre = r.find("h3")
                 if a_tag and titre:
                     liens.append((titre.text.strip(), a_tag["href"]))
-            return liens if liens else [("Aucun résultat pertinent trouvé", "#")]
+            return liens if liens else [("", "#")]
         except Exception as e:
             return [("Erreur lors de la recherche", str(e))]
 
