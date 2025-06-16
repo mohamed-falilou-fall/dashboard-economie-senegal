@@ -9,7 +9,7 @@ import plotly.express as px
 st.markdown("""
     <style>
         body {
-            background-image: url("https://books.openedition.org/irdeditions/file/2131/tei/img-6.jpg/download");
+            background-image: url("background.jpg");
             background-size: cover;
             background-attachment: fixed;
             background-repeat: no-repeat;
