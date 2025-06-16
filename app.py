@@ -82,7 +82,7 @@ Elle s’inscrit à la croisée de la **science des données** et de l’**ingé
 
 @st.cache_data
 def charger_donnees():
-    url = r"API_SEN_DS2_en_csv_v2_11156.csv"
+    url = r"C:\Users\hp\OneDrive\Bureau\world_bank\API_SEN_DS2_en_csv_v2_11156.csv"
     df = pd.read_csv(url, skiprows=4)
     df = df.melt(id_vars=["Country Name", "Country Code", "Indicator Name", "Indicator Code"], 
                  var_name="Year", value_name="Value")
