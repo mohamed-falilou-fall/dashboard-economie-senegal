@@ -6,6 +6,8 @@ import pandas as pd
 import plotly.express as px
 import numpy as np
 from sklearn.ensemble import IsolationForest
+import requests
+from bs4 import BeautifulSoup
 
 # Configuration de la page
 st.set_page_config(page_title="Tableau de bord - Sénégal", layout="centered")
@@ -153,10 +155,45 @@ if not df_filtre.empty:
     st.plotly_chart(fig_anomalie)
     st.dataframe(df_analyse[["Year", "Value", "Anomalie"]])
 
+    # Recherche automatique des causes des anomalies
+    st.subheader("Recherche automatique des causes possibles pour chaque anomalie détectée")
+
+    def rechercher_causes(indicateur, annee):
+        requete = f"Causes {indicateur} Sénégal {annee}"
+        url = f"https://www.google.com/search?q={requete.replace(' ', '+')}"
+        headers = {
+            "User-Agent": "Mozilla/5.0"
+        }
+
+        try:
+            response = requests.get(url, headers=headers)
+            soup = BeautifulSoup(response.text, "html.parser")
+            resultats = soup.select(".tF2Cxc")[:3]  # top 3 résultats
+            liens = []
+            for r in resultats:
+                titre = r.select_one("h3")
+                lien = r.select_one("a")
+                if titre and lien:
+                    liens.append((titre.text.strip(), lien["href"]))
+            return liens
+        except Exception as e:
+            return [("Erreur lors de la recherche", str(e))]
+
+    for _, row in anomalies.iterrows():
+        st.markdown(f"###  Année : {int(row['Year'])} – Anomalie détectée")
+        st.markdown(f"**Indicateur concerné :** `{indicateur_unique}`")
+        st.info("Recherche en cours des causes possibles via Google...")
+
+        resultats = rechercher_causes(indicateur_unique, int(row["Year"]))
+
+        for titre, lien in resultats:
+            st.markdown(f"- 🔗 [{titre}]({lien})")
+        st.markdown("---")
 else:
     st.warning("Aucune donnée pour cet indicateur.")
 
-st.markdown("""
+st.markdown
+("""
 ---
 **Conceptualisé et développé par Mohamed Falilou Fall**  
 Juin 2025  
