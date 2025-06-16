@@ -111,7 +111,7 @@ if not df_filtre.empty:
     st.subheader(" Détection automatique des anomalies")
 
     st.markdown("""
-> ** Qu'est-ce qu'une anomalie économique ?**
+> Qu'est-ce qu'une anomalie économique ?
 >
 > Une **anomalie** correspond à une variation brutale ou inhabituelle dans l’évolution d’un indicateur économique d'une année à l'autre.
 >
