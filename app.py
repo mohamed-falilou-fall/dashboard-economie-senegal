@@ -16,7 +16,7 @@ st.set_page_config(page_title="Tableau de bord - Sénégal", layout="centered")
 st.markdown("""
     <style>
         body {
-            background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/46/Dakar-Ind%C3%A9pendance.jpg");
+            background-image: url("https://lot.dhl.com/wp-content/uploads/2020/06/Article-Key-Image-1072036361-800x420.jpg");
             background-size: cover;
             background-attachment: fixed;
             background-repeat: no-repeat;
