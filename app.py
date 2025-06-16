@@ -14,7 +14,7 @@ st.set_page_config(page_title="Tableau de bord - Sénégal", layout="centered")
 st.markdown("""
     <style>
         body {
-            background-image: url("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.tourhebdo.com%2Factualites%2Fdestination%2Fpourquoi-le-senegal-revient-sur-le-devant-de-la-scene-508121.php&psig=AOvVaw0ob_pjTSAZVMD7FRi--lcc&ust=1750178924051000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCLi_9d-y9o0DFQAAAAAdAAAAABAE");
+            background-image: url("https://www.lemoniteur.fr/mediatheque/8/3/3/002422338_896x598_c.jpeg");
             background-size: cover;
             background-attachment: fixed;
             background-repeat: no-repeat;
