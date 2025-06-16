@@ -58,6 +58,7 @@ Elle s’inscrit à la croisée de la **science des données** et de l’**ingé
 - Graphique interactif retraçant l’évolution temporelle de l’indicateur
 - Affichage des données tabulaires brutes
 - Option de **téléchargement direct** du jeu de données filtré (.csv)
+- Identification des ruptures, tendances ou anomalies historiques
 
 ---
 
