@@ -16,7 +16,7 @@ st.set_page_config(page_title="Tableau de bord - Sénégal", layout="centered")
 st.markdown("""
     <style>
         body {
-            background-image: url("https://www.lemoniteur.fr/mediatheque/8/3/3/002422338_896x598_c.jpeg");
+            background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/46/Dakar-Ind%C3%A9pendance.jpg");
             background-size: cover;
             background-attachment: fixed;
             background-repeat: no-repeat;
