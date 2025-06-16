@@ -8,19 +8,24 @@ import plotly.express as px
 # Configuration de la page
 st.set_page_config(page_title="Tableau de bord - Sénégal", layout="centered")
 
-# CSS pour fond d'écran + lisibilité
 st.markdown("""
     <style>
+        html, body, .stApp {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background-image: url("https://actu.rts.sn/wp-content/uploads/2025/05/ChatGPT-Image-7-mai-2025-a-18_53_42.png");
             background-size: cover;
             background-attachment: fixed;
             background-repeat: no-repeat;
-            background-position: center;
+            background-position: center center;
         }
 
         .stApp {
-            background-color: rgba(0, 0, 0, 0.75); /* fond sombre pour contraste */
+            background-color: rgba(0, 0, 0, 0.75);
             padding: 2rem;
             border-radius: 10px;
             color: white !important;
@@ -35,7 +40,7 @@ st.markdown("""
         }
 
         .stDataFrame div {
-            color: black !important;  /* tableau en texte noir sur fond clair */
+            color: black !important;
         }
     </style>
 """, unsafe_allow_html=True)
