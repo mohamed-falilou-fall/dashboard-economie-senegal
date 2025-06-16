@@ -6,26 +6,18 @@ import pandas as pd
 import plotly.express as px
 
 # Configuration de la page
-st.set_page_config(page_title="Tableau de bord - Sénégal", layout="centered")
-
 st.markdown("""
     <style>
-        html, body, .stApp {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
             background-image: url("https://actu.rts.sn/wp-content/uploads/2025/05/ChatGPT-Image-7-mai-2025-a-18_53_42.png");
             background-size: cover;
             background-attachment: fixed;
             background-repeat: no-repeat;
-            background-position: center center;
+            background-position: center;
         }
 
         .stApp {
-            background-color: rgba(0, 0, 0, 0.75);
+            background-color: rgba(0, 0, 0, 0.75); /* fond sombre pour contraste */
             padding: 2rem;
             border-radius: 10px;
             color: white !important;
@@ -40,10 +32,13 @@ st.markdown("""
         }
 
         .stDataFrame div {
-            color: black !important;
+            color: black !important;  /* tableau en texte noir sur fond clair */
         }
     </style>
 """, unsafe_allow_html=True)
+            
+    
+        
 
 st.title("Tableau de bord – Écosystème économique du Sénégal (1960 - 2024)")
 
