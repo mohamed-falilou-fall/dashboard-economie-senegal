@@ -118,24 +118,26 @@ if not df_filtre.empty:
         url = f"https://www.google.com/search?q={requete.replace(' ', '+')}"
         headers = {"User-Agent": "Mozilla/5.0"}
         try:
-            response = requests.get(url, headers=headers)
+            response = requests.get(url, headers=headers, timeout=5)
             soup = BeautifulSoup(response.text, "html.parser")
-            resultats = soup.select("h3")
+            resultats = soup.select(".tF2Cxc")
             liens = []
             for r in resultats[:3]:
-                parent = r.find_parent("a")
-                if r.text and parent and parent["href"]:
-                    liens.append((r.text.strip(), parent["href"]))
-            return liens
+                titre = r.select_one("h3")
+                lien = r.select_one("a")["href"]
+                if titre and lien:
+                    liens.append((titre.text.strip(), lien))
+            return liens if liens else [("Aucun résultat pertinent trouvé", "#")]
         except Exception as e:
             return [("Erreur lors de la recherche", str(e))]
 
     for _, row in anomalies.iterrows():
         st.markdown(f"### 📅 Année : {int(row['Year'])} – Anomalie détectée")
         st.markdown(f"**Indicateur concerné :** `{indicateur_unique}`")
-        st.info("Recherche en cours des causes possibles via Google...")
 
-        resultats = rechercher_causes(indicateur_unique, int(row["Year"]))
+        with st.spinner("🔍 Recherche des causes..."):
+            resultats = rechercher_causes(indicateur_unique, int(row["Year"]))
+        
         for titre, lien in resultats:
             st.markdown(f"- 🔗 [{titre}]({lien})")
         st.markdown("---")
