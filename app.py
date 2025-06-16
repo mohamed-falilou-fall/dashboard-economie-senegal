@@ -111,7 +111,7 @@ if not df_filtre.empty:
     st.plotly_chart(fig_anomalie)
     st.dataframe(df_analyse[["Year", "Value", "Anomalie"]])
 
-    st.subheader("🌐 Recherche des causes possibles (via Google)")
+    st.subheader("🌐 Recherche des causes possibles des anomalies (via Google)")
 
     def rechercher_causes(indicateur, annee):
         requete = f"Causes {indicateur} Sénégal {annee}"
