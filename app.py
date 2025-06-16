@@ -52,10 +52,6 @@ Elle met à disposition un tableau de bord dynamique, conçu pour :
 -  **Télécharger** les données filtrées (.csv)
 -  **Détecter automatiquement les anomalies statistiques**
 -  **Rechercher les causes des anomalies sur Google**
-
----
-
-**️Une brique essentielle pour un pilotage économique éclairé par la donnée.**
 """)
 
 @st.cache_data
@@ -120,26 +116,29 @@ if not df_filtre.empty:
         try:
             response = requests.get(url, headers=headers, timeout=5)
             soup = BeautifulSoup(response.text, "html.parser")
-            resultats = soup.select(".tF2Cxc")
+            resultats = soup.find_all("div", class_="g")
             liens = []
             for r in resultats[:3]:
-                titre = r.select_one("h3")
-                lien = r.select_one("a")["href"]
-                if titre and lien:
-                    liens.append((titre.text.strip(), lien))
+                a_tag = r.find("a", href=True)
+                titre = r.find("h3")
+                if a_tag and titre:
+                    liens.append((titre.text.strip(), a_tag["href"]))
             return liens if liens else [("Aucun résultat pertinent trouvé", "#")]
         except Exception as e:
             return [("Erreur lors de la recherche", str(e))]
 
     for _, row in anomalies.iterrows():
-        st.markdown(f"### 📅 Année : {int(row['Year'])} – Anomalie détectée")
+        annee = int(row["Year"])
+        st.markdown(f"### 📅 Année : {annee} – Anomalie détectée")
         st.markdown(f"**Indicateur concerné :** `{indicateur_unique}`")
 
         with st.spinner("🔍 Recherche des causes..."):
-            resultats = rechercher_causes(indicateur_unique, int(row["Year"]))
-        
+            resultats = rechercher_causes(indicateur_unique, annee)
+
         for titre, lien in resultats:
             st.markdown(f"- 🔗 [{titre}]({lien})")
+
+        st.markdown(f"[🔍 Rechercher manuellement sur Google](https://www.google.com/search?q=Causes+{indicateur_unique.replace(' ', '+')}+Sénégal+{annee})")
         st.markdown("---")
 
 else:
