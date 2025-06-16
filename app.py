@@ -129,7 +129,7 @@ if not df_filtre.empty:
 
     for _, row in anomalies.iterrows():
         annee = int(row["Year"])
-        st.markdown(f"### 📅 Année : {annee} – Anomalie détectée")
+        st.markdown(f"### Année : {annee} – Anomalie détectée")
         st.markdown(f"**Indicateur concerné :** `{indicateur_unique}`")
 
         with st.spinner("🔍 Recherche des causes..."):
