@@ -138,7 +138,7 @@ if not df_filtre.empty:
         for titre, lien in resultats:
             st.markdown(f"- [{titre}]({lien})")
 
-        st.markdown(f"[🔍 Voir les résultats trouvés sur Google](https://www.google.com/search?q=Causes+{indicateur_unique.replace(' ', '+')}+Sénégal+{annee})")
+        st.markdown(f"[Voir les résultats trouvés sur Google](https://www.google.com/search?q=Causes+{indicateur_unique.replace(' ', '+')}+Sénégal+{annee})")
         st.markdown("---")
 
 else:
