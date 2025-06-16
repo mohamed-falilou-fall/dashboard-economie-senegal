@@ -9,7 +9,7 @@ import plotly.express as px
 st.markdown("""
     <style>
         body {
-            background-image: url("https://www.au-senegal.com/IMG/jpg/peuplements-vegetaux.jpg");
+            background-image: url("https://www.au-senegal.com/IMG/png/vegetation-senegal-2006.png");
             background-size: cover;
             background-attachment: fixed;
             background-repeat: no-repeat;
