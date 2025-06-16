@@ -31,9 +31,6 @@ st.markdown("""
         h1, h2, h3, h4, h5, h6, p, div {
             color: white !important;
         }
-        .stMarkdown, .stTextInput, .stSelectbox, .stDataFrame {
-            color: white !important;
-        }
         .stDataFrame div {
             color: black !important;
         }
@@ -49,38 +46,16 @@ with st.expander("Présentation de l'application", expanded=True):
 
 Cette application interactive propose une exploration approfondie de **l’écosystème économique du Sénégal** de **1960 à 2024**, à partir des données officielles de la **Banque Mondiale**.
 
-Elle s’inscrit à la croisée de la **science des données** et de l’**ingénierie des données**, en mettant à disposition un tableau de bord dynamique, conçu pour :
-
--  **Visualiser** l’évolution de centaines d’indicateurs économiques (PIB, inflation, commerce, agriculture, éducation, etc.)
--  **Analyser** les tendances structurelles et conjoncturelles sur plus de six décennies
--  **Exporter** les données prêtes à l’emploi pour vos rapports, travaux de recherche, politiques publiques ou projets de développement
-
-#### Fonctionnalités clés :
-- Sélection d’un indicateur parmi plus de 400 disponibles
-- Graphique interactif retraçant l’évolution temporelle de l’indicateur
-- Affichage des données tabulaires brutes
-- Option de **téléchargement direct** du jeu de données filtré (.csv)
-- Identification des ruptures, tendances ou anomalies historiques
+Elle met à disposition un tableau de bord dynamique, conçu pour :
+-  **Visualiser** l’évolution de centaines d’indicateurs économiques
+-  **Analyser** les tendances et ruptures
+-  **Télécharger** les données filtrées (.csv)
+-  **Détecter automatiquement les anomalies statistiques**
+-  **Rechercher les causes des anomalies sur Google**
 
 ---
 
-### Public cible :
-- **Économistes** et analystes macroéconomiques
-- **Chercheurs** et étudiants en sciences sociales
-- **Décideurs publics**, experts en planification
-- **Organisations internationales** et ONG
-- **Journalistes économiques**, entrepreneurs, investisseurs
-
----
-
-### Pourquoi c’est utile ?
--  Fournit une base factuelle pour la formulation de politiques publiques
--  Permet d’identifier des ruptures, tendances ou anomalies historiques
--  Facilite l'intégration des données macro dans des projets de développement, des rapports d’impact ou des analyses prospectives
-
----
-
-**️ Une brique essentielle pour un pilotage économique éclairé par la donnée, en phase avec les enjeux de transformation structurelle du Sénégal.**
+**️Une brique essentielle pour un pilotage économique éclairé par la donnée.**
 """)
 
 @st.cache_data
@@ -106,31 +81,12 @@ if not df_filtre.empty:
     st.dataframe(df_filtre)
 
     csv = df_filtre.to_csv(index=False).encode('utf-8')
-    st.download_button("📥 Télécharger les données de l’indicateur", 
-                       data=csv, 
-                       file_name="indicateur_senegal.csv", 
-                       mime='text/csv')
+    st.download_button("📥 Télécharger les données de l’indicateur", data=csv, file_name="indicateur_senegal.csv", mime='text/csv')
 
-    st.subheader(" Détection automatique des anomalies")
-
+    st.subheader("🔎 Détection automatique des anomalies")
     st.markdown("""
-> Qu'est-ce qu'une anomalie économique ?
->
-> Une **anomalie** correspond à une variation brutale ou inhabituelle dans l’évolution d’un indicateur économique d'une année à l'autre.
->
-> Elle peut être causée par :
-> - Un **choc économique externe** (crise mondiale, flambée des prix)
-> - Une **réforme politique ou fiscale majeure**
-> - Un **changement structurel** dans l’économie (libéralisation, industrialisation, etc.)
->
-> **Exemples :**
-> - Une chute brutale du PIB due à une sécheresse
-> - Une explosion des importations suite à une ouverture commerciale
-> - Un pic d’inflation lié à une crise monétaire
->
->  Le modèle utilisé ici (**Isolation Forest**) identifie automatiquement les années présentant des ruptures ou anomalies statistiques (comportements dans le jeu de données qui diffèrent significativement de ce qui est attendu ou habituel) dans la série temporelle.
->
-> Ces alertes sont indiquées par le symbole ⚠️.
+> Une **anomalie** correspond à une variation brutale ou inhabituelle d’un indicateur.
+> Elle peut résulter d’un choc économique, d’une réforme majeure, ou d’un changement structurel.
     """)
 
     df_analyse = df_filtre.copy()
@@ -155,47 +111,41 @@ if not df_filtre.empty:
     st.plotly_chart(fig_anomalie)
     st.dataframe(df_analyse[["Year", "Value", "Anomalie"]])
 
-    # Recherche automatique des causes des anomalies
-    st.subheader("Recherche automatique des causes possibles pour chaque anomalie détectée")
+    st.subheader("🌐 Recherche des causes possibles (via Google)")
 
     def rechercher_causes(indicateur, annee):
         requete = f"Causes {indicateur} Sénégal {annee}"
         url = f"https://www.google.com/search?q={requete.replace(' ', '+')}"
-        headers = {
-            "User-Agent": "Mozilla/5.0"
-        }
-
+        headers = {"User-Agent": "Mozilla/5.0"}
         try:
             response = requests.get(url, headers=headers)
             soup = BeautifulSoup(response.text, "html.parser")
-            resultats = soup.select(".tF2Cxc")[:3]  # top 3 résultats
+            resultats = soup.select("h3")
             liens = []
-            for r in resultats:
-                titre = r.select_one("h3")
-                lien = r.select_one("a")
-                if titre and lien:
-                    liens.append((titre.text.strip(), lien["href"]))
+            for r in resultats[:3]:
+                parent = r.find_parent("a")
+                if r.text and parent and parent["href"]:
+                    liens.append((r.text.strip(), parent["href"]))
             return liens
         except Exception as e:
             return [("Erreur lors de la recherche", str(e))]
 
     for _, row in anomalies.iterrows():
-        st.markdown(f"###  Année : {int(row['Year'])} – Anomalie détectée")
+        st.markdown(f"### 📅 Année : {int(row['Year'])} – Anomalie détectée")
         st.markdown(f"**Indicateur concerné :** `{indicateur_unique}`")
         st.info("Recherche en cours des causes possibles via Google...")
 
         resultats = rechercher_causes(indicateur_unique, int(row["Year"]))
-
         for titre, lien in resultats:
             st.markdown(f"- 🔗 [{titre}]({lien})")
         st.markdown("---")
+
 else:
     st.warning("Aucune donnée pour cet indicateur.")
-
 
 st.markdown("""
 ---
 **Conceptualisé et développé par Mohamed Falilou Fall**  
-Juin 2025  
-📧 Email : [mff.falilou.fall@gmail.com](mailto:mff.falilou.fall@gmail.com)
+📧 [mff.falilou.fall@gmail.com](mailto:mff.falilou.fall@gmail.com)  
+🗓️ Juin 2025
 """)
