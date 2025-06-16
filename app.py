@@ -125,7 +125,7 @@ if not df_filtre.empty:
 > - Une explosion des importations suite à une ouverture commerciale
 > - Un pic d’inflation lié à une crise monétaire
 >
->  Le modèle utilisé ici (**Isolation Forest**) identifie automatiquement les années présentant des ruptures ou anomalies statistiques dans la série temporelle.
+>  Le modèle utilisé ici (**Isolation Forest**) identifie automatiquement les années présentant des ruptures ou anomalies statistiques (comportements dans le jeu de données qui diffèrent significativement de ce qui est attendu ou habituel) dans la série temporelle.
 >
 > Ces alertes sont indiquées par le symbole ⚠️.
     """)
