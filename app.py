@@ -118,7 +118,7 @@ else:
 
 st.markdown("""
 ---
-**Désigné et développé par Mohamed Falilou Fall**  
+**Conceptualisé et développé par Mohamed Falilou Fall**  
 Juin 2025  
 📧 Email : [mff.falilou.fall@gmail.com](mailto:mff.falilou.fall@gmail.com)
 """)
