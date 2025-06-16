@@ -9,7 +9,7 @@ import plotly.express as px
 st.markdown("""
     <style>
         body {
-            background-image: url("https://actu.rts.sn/wp-content/uploads/2025/05/ChatGPT-Image-7-mai-2025-a-18_53_42.png");
+            background-image: url("https://www.ansd.sn/sites/default/files/2022-12/annuaire-stat-rev.jpg");
             background-size: cover;
             background-attachment: fixed;
             background-repeat: no-repeat;
