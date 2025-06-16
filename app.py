@@ -42,7 +42,7 @@ st.title("Tableau de bord – Écosystème économique du Sénégal (1960 - 2024
 with st.expander("Présentation de l'application", expanded=True):
     st.markdown("""
 ### Application de Data Science & Data Engineering pour l’économie sénégalaise
-#### Développée par **Mohamed Falilou Fall**
+#### Développée par ***Mohamed Falilou Fall***
 
 Cette application interactive propose une exploration approfondie de **l’écosystème économique du Sénégal** de **1960 à 2024**, à partir des données officielles de la **Banque Mondiale**.
 
