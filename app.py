@@ -35,9 +35,14 @@ st.markdown("""
             color: black !important;
         }
 
-        /* ✅ UNIQUE CORRECTION :
-           texte du label du menu "Choisir un indicateur..." en noir */
-        div[data-testid="stSelectbox"] label {
+        /* 🔹 CORRECTION UNIQUE : texte du selectbox en NOIR */
+        div[data-baseweb="select"] * {
+            color: black !important;
+        }
+        div[data-baseweb="select"] > div {
+            color: black !important;
+        }
+        div[data-baseweb="menu"] * {
             color: black !important;
         }
     </style>
@@ -184,6 +189,6 @@ else:
 st.markdown("""
 ---
 **Conceptualisé et développé par Mohamed Falilou Fall**  
- [mff.falilou.fall@gmail.com](mailto:mff.falilou.fall@gmail.com)  
- Juin 2025
+[mff.falilou.fall@gmail.com](mailto:mff.falilou.fall@gmail.com)  
+Juin 2025
 """)
