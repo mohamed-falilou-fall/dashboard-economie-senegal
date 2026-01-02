@@ -26,16 +26,16 @@ st.markdown("""
             background-color: rgba(0, 0, 0, 0.75);
             padding: 2rem;
             border-radius: 10px;
-            color: white !important;
+            color: #0B1F3B !important;
         }
         h1, h2, h3, h4, h5, h6, p, div {
-            color: white !important;
+            color: #0B1F3B !important;
         }
         .stDataFrame div {
             color: black !important;
         }
 
-        /* CORRECTION : texte du menu déroulant en noir */
+        /* texte du menu déroulant conservé en noir */
         div[data-baseweb="select"] span {
             color: black !important;
         }
