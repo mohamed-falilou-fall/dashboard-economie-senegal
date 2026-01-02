@@ -58,6 +58,7 @@ Elle met à disposition un tableau de bord dynamique, conçu pour :
 -  **Télécharger** les données filtrées (.csv)
 -  **Détecter automatiquement les anomalies statistiques**
 -  **Rechercher les causes des anomalies sur Google**
+-   **Merci de mettre votre navigateur en thème sombre pour une meilleure aisance de lecture et de navigation**
 """)
 
 @st.cache_data
