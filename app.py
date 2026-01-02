@@ -52,6 +52,13 @@ Elle met à disposition un tableau de bord dynamique, conçu pour :
 -  **Télécharger** les données filtrées (.csv)
 -  **Détecter automatiquement les anomalies statistiques**
 -  **Rechercher les causes des anomalies sur Google**
+
+/* Correction couleur du menu déroulant (selectbox) */
+div[data-baseweb="select"] * {
+    color: black !important;
+}
+
+
 """)
 
 @st.cache_data
@@ -77,9 +84,9 @@ if not df_filtre.empty:
     st.dataframe(df_filtre)
 
     csv = df_filtre.to_csv(index=False).encode('utf-8')
-    st.download_button("📥 Télécharger les données de l’indicateur", data=csv, file_name="indicateur_senegal.csv", mime='text/csv')
+    st.download_button("Télécharger les données de l’indicateur", data=csv, file_name="indicateur_senegal.csv", mime='text/csv')
 
-    st.subheader("🔎 Détection automatique des anomalies")
+    st.subheader("Détection automatique des anomalies")
     st.markdown("""
 > Une **anomalie** correspond à une variation brutale ou inhabituelle d’un indicateur.
 > Elle peut résulter d’un choc économique, d’une réforme majeure, ou d’un changement structurel.
@@ -107,7 +114,7 @@ if not df_filtre.empty:
     st.plotly_chart(fig_anomalie)
     st.dataframe(df_analyse[["Year", "Value", "Anomalie"]])
 
-    st.subheader("🌐 Recherche des causes possibles des anomalies (via Google)")
+    st.subheader("Recherche des causes possibles des anomalies (via Google)")
 
     def rechercher_causes(indicateur, annee):
         requete = f"Causes {indicateur} Sénégal {annee}"
@@ -132,7 +139,7 @@ if not df_filtre.empty:
         st.markdown(f"### Année : {annee} – Anomalie détectée")
         st.markdown(f"**Indicateur concerné :** `{indicateur_unique}`")
 
-        with st.spinner("🔍 Recherche des causes..."):
+        with st.spinner(" Recherche des causes..."):
             resultats = rechercher_causes(indicateur_unique, annee)
 
         for titre, lien in resultats:
@@ -147,6 +154,6 @@ else:
 st.markdown("""
 ---
 **Conceptualisé et développé par Mohamed Falilou Fall**  
-📧 [mff.falilou.fall@gmail.com](mailto:mff.falilou.fall@gmail.com)  
-🗓️ Juin 2025
+ [mff.falilou.fall@gmail.com](mailto:mff.falilou.fall@gmail.com)  
+ Juin 2025
 """)
