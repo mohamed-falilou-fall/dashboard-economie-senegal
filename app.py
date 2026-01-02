@@ -52,13 +52,6 @@ Elle met à disposition un tableau de bord dynamique, conçu pour :
 -  **Télécharger** les données filtrées (.csv)
 -  **Détecter automatiquement les anomalies statistiques**
 -  **Rechercher les causes des anomalies sur Google**
-
-/* Correction couleur du menu déroulant (selectbox) */
-div[data-baseweb="select"] * {
-    color: black !important;
-}
-
-
 """)
 
 @st.cache_data
