@@ -105,6 +105,14 @@ Elle permet de :
 - Télécharger les données (.csv)
 - Détecter automatiquement les anomalies
 - Rechercher leurs causes
+
+/* Mettre le label et le contenu du selectbox en noir */
+div[data-testid="stSelectbox"] label,
+div[data-baseweb="select"] * {
+    color: black !important;
+}
+
+
 """)
 
 @st.cache_data
