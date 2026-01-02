@@ -34,6 +34,12 @@ st.markdown("""
         .stDataFrame div {
             color: black !important;
         }
+
+        /* ✅ UNIQUE CORRECTION :
+           texte du label du menu "Choisir un indicateur..." en noir */
+        div[data-testid="stSelectbox"] label {
+            color: black !important;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -52,20 +58,17 @@ Elle met à disposition un tableau de bord dynamique, conçu pour :
 -  **Télécharger** les données filtrées (.csv)
 -  **Détecter automatiquement les anomalies statistiques**
 -  **Rechercher les causes des anomalies sur Google**
-
-/* Correction lisibilité du menu déroulant (selectbox) */
-div[data-baseweb="select"] span {
-    color: black !important;
-}
-
 """)
 
 @st.cache_data
 def charger_donnees():
     url = r"API_SEN_DS2_en_csv_v2_11156.csv"
     df = pd.read_csv(url, skiprows=4)
-    df = df.melt(id_vars=["Country Name", "Country Code", "Indicator Name", "Indicator Code"], 
-                 var_name="Year", value_name="Value")
+    df = df.melt(
+        id_vars=["Country Name", "Country Code", "Indicator Name", "Indicator Code"],
+        var_name="Year",
+        value_name="Value"
+    )
     df = df[df["Country Name"] == "Senegal"]
     df["Year"] = df["Year"].astype(str)
     return df
@@ -73,17 +76,31 @@ def charger_donnees():
 df_long = charger_donnees()
 indicator_list = sorted(df_long['Indicator Name'].dropna().unique())
 
-indicateur_unique = st.selectbox("Choisir un indicateur économique à visualiser :", indicator_list)
+indicateur_unique = st.selectbox(
+    "Choisir un indicateur économique à visualiser :",
+    indicator_list
+)
+
 df_filtre = df_long[df_long['Indicator Name'] == indicateur_unique]
 
 if not df_filtre.empty:
-    fig = px.line(df_filtre, x="Year", y="Value", color="Indicator Name", 
-                  title=f"Évolution de l’indicateur : {indicateur_unique}")
+    fig = px.line(
+        df_filtre,
+        x="Year",
+        y="Value",
+        color="Indicator Name",
+        title=f"Évolution de l’indicateur : {indicateur_unique}"
+    )
     st.plotly_chart(fig)
     st.dataframe(df_filtre)
 
     csv = df_filtre.to_csv(index=False).encode('utf-8')
-    st.download_button("Télécharger les données de l’indicateur", data=csv, file_name="indicateur_senegal.csv", mime='text/csv')
+    st.download_button(
+        "Télécharger les données de l’indicateur",
+        data=csv,
+        file_name="indicateur_senegal.csv",
+        mime='text/csv'
+    )
 
     st.subheader("Détection automatique des anomalies")
     st.markdown("""
@@ -99,16 +116,27 @@ if not df_filtre.empty:
 
     model = IsolationForest(contamination=0.1, random_state=42)
     df_analyse["Anomaly_Score"] = model.fit_predict(df_analyse[["Value"]])
-    df_analyse["Anomalie"] = df_analyse["Anomaly_Score"].apply(lambda x: "⚠️" if x == -1 else "")
+    df_analyse["Anomalie"] = df_analyse["Anomaly_Score"].apply(
+        lambda x: "⚠️" if x == -1 else ""
+    )
 
-    fig_anomalie = px.line(df_analyse, x="Year", y="Value", title=f"Anomalies détectées pour : {indicateur_unique}")
+    fig_anomalie = px.line(
+        df_analyse,
+        x="Year",
+        y="Value",
+        title=f"Anomalies détectées pour : {indicateur_unique}"
+    )
+
     anomalies = df_analyse[df_analyse["Anomalie"] == "⚠️"]
 
-    fig_anomalie.add_scatter(x=anomalies["Year"], y=anomalies["Value"],
-                             mode='markers+text',
-                             text=anomalies["Anomalie"],
-                             marker=dict(color='red', size=10),
-                             name='Anomalie détectée')
+    fig_anomalie.add_scatter(
+        x=anomalies["Year"],
+        y=anomalies["Value"],
+        mode='markers+text',
+        text=anomalies["Anomalie"],
+        marker=dict(color='red', size=10),
+        name='Anomalie détectée'
+    )
 
     st.plotly_chart(fig_anomalie)
     st.dataframe(df_analyse[["Year", "Value", "Anomalie"]])
@@ -144,7 +172,10 @@ if not df_filtre.empty:
         for titre, lien in resultats:
             st.markdown(f"- [{titre}]({lien})")
 
-        st.markdown(f"[Voir les résultats trouvés sur Google](https://www.google.com/search?q=Causes+{indicateur_unique.replace(' ', '+')}+Sénégal+{annee})")
+        st.markdown(
+            f"[Voir les résultats trouvés sur Google]"
+            f"(https://www.google.com/search?q=Causes+{indicateur_unique.replace(' ', '+')}+Sénégal+{annee})"
+        )
         st.markdown("---")
 
 else:
