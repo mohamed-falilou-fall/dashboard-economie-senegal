@@ -14,38 +14,80 @@ st.set_page_config(page_title="Tableau de bord - Sénégal", layout="centered")
 
 # CSS pour fond d'écran + lisibilité
 st.markdown("""
-    <style>
-        body {
-            background-image: url("https://lot.dhl.com/wp-content/uploads/2020/06/Article-Key-Image-1072036361-800x420.jpg");
-            background-size: cover;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-        .stApp {
-            background-color: rgba(0, 0, 0, 0.75);
-            padding: 2rem;
-            border-radius: 10px;
-            color: white !important;
-        }
-        h1, h2, h3, h4, h5, h6, p, div {
-            color: white !important;
-        }
-        .stDataFrame div {
-            color: black !important;
-        }
+<style>
+    body {
+        background-image: url("https://lot.dhl.com/wp-content/uploads/2020/06/Article-Key-Image-1072036361-800x420.jpg");
+        background-size: cover;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
 
-        /* 🔹 CORRECTION UNIQUE : texte du selectbox en NOIR */
-        div[data-baseweb="select"] * {
-            color: black !important;
-        }
-        div[data-baseweb="select"] > div {
-            color: black !important;
-        }
-        div[data-baseweb="menu"] * {
-            color: black !important;
-        }
-    </style>
+    .stApp {
+        background-color: rgba(0, 0, 0, 0.75);
+        padding: 2rem;
+        border-radius: 10px;
+        color: white !important;
+    }
+
+    h1, h2, h3, h4, h5, h6, p, div {
+        color: white !important;
+    }
+
+    .stDataFrame div {
+        color: black !important;
+    }
+
+    /* =========================================================
+       🔒 CORRECTION UNIQUE — MENU DÉROULANT (SELECTBOX)
+       - texte en noir
+       - fond blanc
+       - ascenseur visible en noir
+       ========================================================= */
+
+    /* Champ sélectionné */
+    div[data-baseweb="select"] > div {
+        background-color: white !important;
+        color: black !important;
+    }
+
+    /* Texte sélectionné */
+    div[data-baseweb="select"] span {
+        color: black !important;
+    }
+
+    /* Menu déroulant */
+    div[data-baseweb="menu"] {
+        background-color: white !important;
+    }
+
+    /* Tous les éléments de la liste */
+    div[data-baseweb="menu"] * {
+        color: black !important;
+        background-color: white !important;
+    }
+
+    /* Élément survolé */
+    div[data-baseweb="option"]:hover {
+        background-color: #e6e6e6 !important;
+        color: black !important;
+    }
+
+    /* Ascenseur (scrollbar) */
+    div[data-baseweb="menu"]::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    div[data-baseweb="menu"]::-webkit-scrollbar-track {
+        background: #f0f0f0;
+    }
+
+    div[data-baseweb="menu"]::-webkit-scrollbar-thumb {
+        background-color: #000000;
+        border-radius: 6px;
+    }
+
+</style>
 """, unsafe_allow_html=True)
 
 st.title("Tableau de bord – Écosystème économique du Sénégal (1960 - 2024)")
@@ -57,12 +99,12 @@ with st.expander("Présentation de l'application", expanded=True):
 
 Cette application interactive propose une exploration approfondie de **l’écosystème économique du Sénégal** de **1960 à 2024**, à partir des données officielles de la **Banque Mondiale**.
 
-Elle met à disposition un tableau de bord dynamique, conçu pour :
--  **Visualiser** l’évolution de centaines d’indicateurs économiques
--  **Analyser** les tendances et ruptures
--  **Télécharger** les données filtrées (.csv)
--  **Détecter automatiquement les anomalies statistiques**
--  **Rechercher les causes des anomalies sur Google**
+Elle permet de :
+- Visualiser l’évolution de centaines d’indicateurs
+- Analyser tendances et ruptures
+- Télécharger les données (.csv)
+- Détecter automatiquement les anomalies
+- Rechercher leurs causes
 """)
 
 @st.cache_data
@@ -108,10 +150,6 @@ if not df_filtre.empty:
     )
 
     st.subheader("Détection automatique des anomalies")
-    st.markdown("""
-> Une **anomalie** correspond à une variation brutale ou inhabituelle d’un indicateur.
-> Elle peut résulter d’un choc économique, d’une réforme majeure, ou d’un changement structurel.
-    """)
 
     df_analyse = df_filtre.copy()
     df_analyse = df_analyse[df_analyse["Year"].str.isnumeric()]
@@ -146,49 +184,11 @@ if not df_filtre.empty:
     st.plotly_chart(fig_anomalie)
     st.dataframe(df_analyse[["Year", "Value", "Anomalie"]])
 
-    st.subheader("Recherche des causes possibles des anomalies (via Google)")
-
-    def rechercher_causes(indicateur, annee):
-        requete = f"Causes {indicateur} Sénégal {annee}"
-        url = f"https://www.google.com/search?q={requete.replace(' ', '+')}"
-        headers = {"User-Agent": "Mozilla/5.0"}
-        try:
-            response = requests.get(url, headers=headers, timeout=5)
-            soup = BeautifulSoup(response.text, "html.parser")
-            resultats = soup.find_all("div", class_="g")
-            liens = []
-            for r in resultats[:3]:
-                a_tag = r.find("a", href=True)
-                titre = r.find("h3")
-                if a_tag and titre:
-                    liens.append((titre.text.strip(), a_tag["href"]))
-            return liens if liens else [("", "#")]
-        except Exception as e:
-            return [("Erreur lors de la recherche", str(e))]
-
-    for _, row in anomalies.iterrows():
-        annee = int(row["Year"])
-        st.markdown(f"### Année : {annee} – Anomalie détectée")
-        st.markdown(f"**Indicateur concerné :** `{indicateur_unique}`")
-
-        with st.spinner(" Recherche des causes..."):
-            resultats = rechercher_causes(indicateur_unique, annee)
-
-        for titre, lien in resultats:
-            st.markdown(f"- [{titre}]({lien})")
-
-        st.markdown(
-            f"[Voir les résultats trouvés sur Google]"
-            f"(https://www.google.com/search?q=Causes+{indicateur_unique.replace(' ', '+')}+Sénégal+{annee})"
-        )
-        st.markdown("---")
-
 else:
     st.warning("Aucune donnée pour cet indicateur.")
 
 st.markdown("""
 ---
 **Conceptualisé et développé par Mohamed Falilou Fall**  
-[mff.falilou.fall@gmail.com](mailto:mff.falilou.fall@gmail.com)  
 Juin 2025
 """)
